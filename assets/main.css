@@ -8,3 +8,18 @@ canvas {
     top: 0;
     left: 0;
 }
+
+#dom-wrapper {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+#dom-wrapper h1 {
+    margin-top: 380px;
+    color: #fff;
+    opacity: 0.6;
+    font-family: "Inconsolata";
+    font-weight: lighter;
+    cursor: pointer;
+}
