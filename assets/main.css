@@ -3,6 +3,11 @@ body, html {
     margin: 0;
 }
 
+@font-face {
+    font-family: "custom";
+    src: url(CAXTON_3.TTF);
+}
+
 canvas {
     position: fixed;
     top: 0;
@@ -19,7 +24,7 @@ canvas {
     margin-top: 380px;
     color: #fff;
     opacity: 0.6;
-    font-family: "Inconsolata";
+    font-family: "custom";
     font-weight: lighter;
     cursor: pointer;
 }
