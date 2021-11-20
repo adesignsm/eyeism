@@ -4,7 +4,7 @@ var theta = 0, radius = 100;
 var mesh, geo, material;
 var meshArr = [];
 
-var cube, grid1, grid2, grid3, grid4, grid5, division, limit, moveable
+var cube, grid1, grid2, grid3, grid4, grid5, grid6, division, limit, moveable
 
 var img_arr = [
     "balance-pathway.jpg",
@@ -39,6 +39,16 @@ function init() {
     document.getElementById("canvas-container").appendChild(renderer.domElement);
 
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.minDistance = 250; //zoom
+    controls.maxDistance = 300;
+
+    controls.minPolarAngle = 0; //vertical pan
+    controls.maxPolarAngle = Math.PI / 2;
+
+    controls.minAzimuthAngle = -1; //horizontal pan
+    controls.maxAzimuthAngle = 1;
+
+    controls.update();
 
     window.addEventListener("resize", function() {
 
@@ -75,12 +85,32 @@ function init() {
     setInterval(function() {
 
         cube.material[0].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-        cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-        cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-        cube.material[4].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-        cube.material[5].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-
     }, Math.floor(Math.random() * 1) + 1000);
+
+    setInterval(function() {
+
+        cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, Math.floor(Math.random() * 1) + 500);
+
+    setInterval(function() {
+
+        cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, 1000);
+
+    setInterval(function() {
+
+        cube.material[3].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, Math.floor(Math.random() * 500) + 1000);
+
+    setInterval(function() {
+
+        cube.material[4].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, 700);
+
+    setInterval(function() {
+
+        cube.material[5].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, Math.floor(Math.random() * 700) + 1000);
 
     division = 30;
     limit = 200;
@@ -90,6 +120,7 @@ function init() {
     grid3 = new THREE.GridHelper(limit * 2, division, "white", "white");
     grid4 = new THREE.GridHelper(limit * 2, division, "white", "white");
     grid5 = new THREE.GridHelper(limit * 2, division, "white", "white");
+    grid6 = new THREE.GridHelper(limit * 2, division, "white", "white");
 
     moveable = [];
     
@@ -103,12 +134,14 @@ function init() {
     grid3.geometry.addAttribute("moveable", new THREE.BufferAttribute(new Uint8Array(moveable), 1));
     grid4.geometry.addAttribute("moveable", new THREE.BufferAttribute(new Uint8Array(moveable), 1));
     grid5.geometry.addAttribute("moveable", new THREE.BufferAttribute(new Uint8Array(moveable), 1));
+    grid6.geometry.addAttribute("moveable", new THREE.BufferAttribute(new Uint8Array(moveable), 1));
 
     grid1.name = "grid_plane1";
     grid2.name = "grid_plane2";
     grid3.name = "grid_plane3";
     grid4.name = "grid_plane4";
     grid5.name = "grid_plane5";
+    grid6.name = "grid_plane6";
 
     grid1.material = new THREE.ShaderMaterial({
         uniforms: {
@@ -325,10 +358,53 @@ function init() {
         vertexColors: THREE.VertexColors
     });
 
+    grid6.material = new THREE.ShaderMaterial({
+        uniforms: {
+            time: {
+            value: 0
+            },
+            limits: {
+            value: new THREE.Vector2(-limit, limit)
+            },
+            speed: {
+            value: 5
+            }
+        },
+        vertexShader: `
+            uniform float time;
+            uniform vec2 limits;
+            uniform float speed;
+            
+            attribute float moveable;
+            
+            varying vec3 vColor;
+        
+            void main() {
+            vColor = color;
+            float limLen = limits.y - limits.x;
+            vec3 pos = position;
+            if (floor(moveable + 0.5) > 0.5){ // if a point has "moveable" attribute = 1 
+                float dist = speed * time;
+                float currPos = mod((pos.z + dist) - limits.x, limLen) + limits.x;
+                pos.z = currPos;
+            } 
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos,1.0);
+            }
+        `,
+        fragmentShader: `
+            varying vec3 vColor;
+        
+            void main() {
+            gl_FragColor = vec4(vColor, 1.);
+            }
+        `,
+        vertexColors: THREE.VertexColors
+    });
+
     clock = new THREE.Clock();
     time = 0;
 
-    scene.add(grid1, grid2, grid3, grid4, grid5);
+    scene.add(grid1, grid2, grid3, grid4, grid5, grid6);
 
     grid1.position.set(0, -3, 100);
 
@@ -347,7 +423,8 @@ function init() {
     grid5.position.set(0, 197, 300);
     grid5.rotation.x = 1.56;
     grid5.rotation.y = 3.142;
-
+    
+    grid6.position.set(0, 395, 100);
 }
 
 function animate() {
@@ -368,6 +445,7 @@ function render() {
     grid3.material.uniforms.time.value = time;
     grid4.material.uniforms.time.value = time;
     grid5.material.uniforms.time.value = time;
+    grid6.material.uniforms.time.value = time;
 
     renderer.render(scene, camera);
 }
