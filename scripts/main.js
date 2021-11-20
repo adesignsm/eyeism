@@ -29,7 +29,7 @@ function init() {
     scene = new THREE.Scene();
     mouse = new THREE.Vector2();
 
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
     camera.position.z = 200;
     camera.position.y = 150;
 
@@ -427,13 +427,7 @@ function init() {
     grid6.position.set(0, 395, 100);
 }
 
-function animate() {
-
-    requestAnimationFrame(animate);
-    render();
-}
-
-function render() {
+function update() {
 
     time += clock.getDelta();
 
@@ -446,6 +440,21 @@ function render() {
     grid4.material.uniforms.time.value = time;
     grid5.material.uniforms.time.value = time;
     grid6.material.uniforms.time.value = time;
+}
+
+function animate() {
+
+    setTimeout(function() {
+
+        requestAnimationFrame(animate);
+
+    }, 1000 / 1000);
+
+    update();
+    render();
+}
+
+function render() {
 
     renderer.render(scene, camera);
 }
