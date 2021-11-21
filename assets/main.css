@@ -21,7 +21,7 @@ canvas {
 }
 
 #dom-wrapper h1 {
-    margin-top: 380px;
+    position: absolute;
     color: #fff;
     opacity: 0.6;
     font-family: "custom";

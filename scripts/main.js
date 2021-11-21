@@ -4,7 +4,10 @@ var theta = 0, radius = 100;
 var mesh, geo, material;
 var meshArr = [];
 
-var cube, grid1, grid2, grid3, grid4, grid5, grid6, division, limit, moveable
+var cube, grid1, grid2, grid3, grid4, grid5, grid6, division, limit, moveable, obj_arr = [];
+var mouse, raycaster, INTERSECTED, intersects, tempV;
+
+var colour_detect = new THREE.Color(0xffffff);
 
 var img_arr = [
     "balance-pathway.jpg",
@@ -21,17 +24,18 @@ var img_arr = [
     "infinite-space.jpg"
 ];
 
-init();
-animate();
-
 function init() {
 
     scene = new THREE.Scene();
     mouse = new THREE.Vector2();
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
-    camera.position.z = 200;
-    camera.position.y = 150;
+    camera.position.z = 120;
+    camera.position.y = 100;
+
+    camera.lookAt(new THREE.Vector3(0, 0 ,0));
+
+    mouse = new THREE.Vector2();
 
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -39,14 +43,14 @@ function init() {
     document.getElementById("canvas-container").appendChild(renderer.domElement);
 
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 250; //zoom
-    controls.maxDistance = 300;
+    controls.minDistance = 200; //zoom
+    controls.maxDistance = 250;
 
     controls.minPolarAngle = 0; //vertical pan
     controls.maxPolarAngle = Math.PI / 2;
 
-    controls.minAzimuthAngle = -1; //horizontal pan
-    controls.maxAzimuthAngle = 1;
+    controls.minAzimuthAngle = -0.5; //horizontal pan
+    controls.maxAzimuthAngle = 0.5;
 
     controls.update();
 
@@ -65,22 +69,30 @@ function init() {
 
     var cube_material = [
 
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])}),
-        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0])})
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff}),
+        new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("./assets/Images/" + img_arr[0]), color: 0xffffff})
     ];
 
     var cube_face = new THREE.MeshFaceMaterial(cube_material);
 
     cube = new THREE.Mesh(cube_geo, cube_face);
+    cube.name = "cube-object";
+
+    cube.callback = function() {
+
+        console.log(this);
+    }
 
     cube.position.y = 100;
     cube.position.z = 100;
+
     scene.add(cube);
+    obj_arr.push(cube);
 
     setInterval(function() {
 
@@ -405,6 +417,7 @@ function init() {
     time = 0;
 
     scene.add(grid1, grid2, grid3, grid4, grid5, grid6);
+    obj_arr.push(grid1, grid2, grid3, grid4, grid5, grid6);
 
     grid1.position.set(0, -3, 100);
 
@@ -442,7 +455,55 @@ function update() {
     grid6.material.uniforms.time.value = time;
 }
 
-function animate() {
+tempV = new THREE.Vector3();
+raycaster = new THREE.Raycaster();
+
+var render = function() {
+
+    for (var x = 0; x < obj_arr.length; x++) {
+
+        cube.updateWorldMatrix(true, false);
+        cube.getWorldPosition(tempV);
+    
+        tempV.project(camera);
+        raycaster.setFromCamera(tempV, camera);
+
+        var label_x = (tempV.x * .5 + .5) * document.getElementsByTagName("canvas")[0].clientWidth;
+        var label_y = (tempV.y * -.5 + .5) * document.getElementsByTagName("canvas")[0].clientHeight;
+
+        document.getElementById("iyeism-text").style.transform = `translate(-50%, -50%) translate(${label_x}px,${label_y}px)`
+    }
+
+    document.addEventListener("mousedown", onMouseDown, false);
+
+    function onMouseDown(e) {
+
+        e.preventDefault();
+
+        mouse.x = (e.clientX / renderer.domElement.clientWidth) * 2 - 1;
+        mouse.y = -(e.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        intersects = raycaster.intersectObjects(obj_arr, true);
+
+        for (var i = 0; i < intersects.length; i++) {
+
+            if (intersects[i].object.name == "cube-object") {
+
+                window.open("https://www.iyeism.com/", target = "_self");
+                document.body.style.cursor = "pointer";
+            
+            } else {
+                console.log("nah");
+            }
+        }
+    }
+
+    renderer.render(scene, camera);
+}
+
+var animate = function() {
 
     setTimeout(function() {
 
@@ -454,7 +515,7 @@ function animate() {
     render();
 }
 
-function render() {
+init();
+animate();
 
-    renderer.render(scene, camera);
-}
+console.log(obj_arr);
