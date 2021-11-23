@@ -3,6 +3,10 @@ body, html {
     margin: 0;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 @font-face {
     font-family: "custom";
     src: url(CAXTON_3.TTF);
@@ -20,11 +24,19 @@ canvas {
     text-align: center;
 }
 
-#dom-wrapper h1 {
+#iyeism-text {
     position: absolute;
     color: #fff;
-    opacity: 0.6;
+    opacity: 0.8;
     font-family: "custom";
     font-weight: lighter;
+    font-size: 72px;
     cursor: pointer;
+}
+
+#iyeism-text-sub {
+    font-size: 24px;
+    font-family: "custom";
+    font-weight: lighter;
+    color: #fff;
 }

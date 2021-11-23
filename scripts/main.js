@@ -33,8 +33,6 @@ function init() {
     camera.position.z = 120;
     camera.position.y = 100;
 
-    camera.lookAt(new THREE.Vector3(0, 0 ,0));
-
     mouse = new THREE.Vector2();
 
     renderer = new THREE.WebGLRenderer({antialias: true});
@@ -42,17 +40,18 @@ function init() {
 
     document.getElementById("canvas-container").appendChild(renderer.domElement);
 
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 200; //zoom
-    controls.maxDistance = 250;
+    var orbit = new THREE.OrbitControls(camera, renderer.domElement);
 
-    controls.minPolarAngle = 0; //vertical pan
-    controls.maxPolarAngle = Math.PI / 2;
+    orbit.minDistance = 200; //zoom
+    orbit.maxDistance = 250;
 
-    controls.minAzimuthAngle = -0.5; //horizontal pan
-    controls.maxAzimuthAngle = 0.5;
+    orbit.minPolarAngle = 0; //vertical pan
+    orbit.maxPolarAngle = Math.PI / 2;
 
-    controls.update();
+    // orbit.minAzimuthAngle = -0.5; //horizontal pan || set to halfmoon
+    // orbit.maxAzimuthAngle = 0.5;
+
+    orbit.update();
 
     window.addEventListener("resize", function() {
 
@@ -97,32 +96,32 @@ function init() {
     setInterval(function() {
 
         cube.material[0].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, Math.floor(Math.random() * 1) + 1000);
-
-    setInterval(function() {
-
-        cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, Math.floor(Math.random() * 1) + 500);
-
-    setInterval(function() {
-
-        cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
     }, 1000);
 
     setInterval(function() {
 
+        cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, 1500);
+
+    setInterval(function() {
+
+        cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+    }, 2000);
+
+    setInterval(function() {
+
         cube.material[3].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, Math.floor(Math.random() * 500) + 1000);
+    }, 2500);
 
     setInterval(function() {
 
         cube.material[4].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 700);
+    }, 3000);
 
     setInterval(function() {
 
         cube.material[5].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, Math.floor(Math.random() * 700) + 1000);
+    }, 3500);
 
     division = 30;
     limit = 200;
@@ -472,6 +471,7 @@ var render = function() {
         var label_y = (tempV.y * -.5 + .5) * document.getElementsByTagName("canvas")[0].clientHeight;
 
         document.getElementById("iyeism-text").style.transform = `translate(-50%, -50%) translate(${label_x}px,${label_y}px)`
+        document.getElementById("iyeism-text-sub").style.transform = `translate(-50%, 330%) translate(${label_x}px,${label_y}px)`
     }
 
     document.addEventListener("mousedown", onMouseDown, false);
