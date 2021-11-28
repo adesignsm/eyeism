@@ -29,7 +29,7 @@ function init() {
     scene = new THREE.Scene();
     mouse = new THREE.Vector2();
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 120;
     camera.position.y = 100;
 
@@ -424,19 +424,19 @@ function init() {
     grid2.rotation.x = 1.56;
     grid2.rotation.y = 3.142;
 
-    grid3.position.set(-203, 196, 100);
-    grid3.rotation.x = -1.563;
+    grid3.position.set(-201, 197, 100);
+    grid3.rotation.x = -1.57;
     grid3.rotation.z = 1.57;
 
-    grid4.position.set(198, 199, 100);
-    grid4.rotation.x = -1.58;
+    grid4.position.set(200, 196.5, 100);
+    grid4.rotation.x = -1.57;
     grid4.rotation.z = 1.57;
 
-    grid5.position.set(0, 197, 300);
-    grid5.rotation.x = 1.56;
+    grid5.position.set(0, 196.5, 300);
+    grid5.rotation.x = 1.57;
     grid5.rotation.y = 3.142;
     
-    grid6.position.set(0, 395, 100);
+    grid6.position.set(0, 397, 100);
 }
 
 function update() {
