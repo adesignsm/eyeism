@@ -35,7 +35,7 @@ function init() {
 
     mouse = new THREE.Vector2();
 
-    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer = new THREE.WebGLRenderer({antialias: false});
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     document.getElementById("canvas-container").appendChild(renderer.domElement);
@@ -93,36 +93,38 @@ function init() {
     scene.add(cube);
     obj_arr.push(cube);
 
-    setInterval(function() {
 
-        cube.material[0].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 1000);
+        setInterval(function() {
 
-    setInterval(function() {
+            cube.material[0].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 1000);
+    
+        setInterval(function() {
+    
+            cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 3000);
+    
+        setInterval(function() {
+    
+            cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 4000);
+    
+        setInterval(function() {
+    
+            cube.material[3].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 5000);
+    
+        setInterval(function() {
+    
+            cube.material[4].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 6000);
+    
+        setInterval(function() {
+    
+            cube.material[5].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
+        }, 7000);
 
-        cube.material[1].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 1500);
-
-    setInterval(function() {
-
-        cube.material[2].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 2000);
-
-    setInterval(function() {
-
-        cube.material[3].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 2500);
-
-    setInterval(function() {
-
-        cube.material[4].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 3000);
-
-    setInterval(function() {
-
-        cube.material[5].map = new THREE.TextureLoader().load("./assets/Images/" + img_arr[Math.floor(Math.random() * img_arr.length)]);
-    }, 3500);
-
+ 
     division = 30;
     limit = 200;
 
@@ -509,7 +511,7 @@ var animate = function() {
 
         requestAnimationFrame(animate);
 
-    }, 1000 / 1000);
+    }, 3000 / 3000);
 
     update();
     render();
@@ -517,5 +519,3 @@ var animate = function() {
 
 init();
 animate();
-
-console.log(obj_arr);
