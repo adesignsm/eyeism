@@ -125,7 +125,7 @@ function init() {
         }, 7000);
 
  
-    division = 15;
+    division = 30;
     limit = 200;
 
     grid1 = new THREE.GridHelper(limit * 2, division, "white", "white");
