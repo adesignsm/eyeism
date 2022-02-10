@@ -474,6 +474,7 @@ var render = function() {
 
         document.getElementById("iyeism-text").style.transform = `translate(-50%, -50%) translate(${label_x}px,${label_y}px)`
         document.getElementById("iyeism-text-sub").style.transform = `translate(-50%, 330%) translate(${label_x}px,${label_y}px)`
+        document.getElementById("iyeism-text-date").style.transform = `translate(-50%, 330%) translate(${label_x}px,${label_y}px)`
     }
 
     document.addEventListener("mousedown", onMouseDown, false);
